@@ -14,6 +14,21 @@ const getAll = (request, response) => {
 }
 
 const getByName = (request, response) => {
+    const nomeContato = (request.params.nome).split('-').join(' ');
+    contatoCollections.find({ nome: nomeContato }, (error, contato) => {
+        if (error) {
+            response.status(500).send(error);
+        } else if (contato[0]) {
+            response.status(200).json({
+                mensagem: "GET com sucesso",
+                contato: contato
+            });
+        } else {
+            response.status(404).json({
+                mensagem: "Contato não encontrado"
+            })
+        }
+    })
     
 }
 
@@ -21,18 +36,16 @@ const getById = (request, response) => {
     const contatoId = request.params.id;
     contatoCollections.findById(contatoId, (error, contato) => {
         if (error) {
-            response.status(500).send(error);
-        } else if (contato) {
+            response.status(404).json({
+                mensagem: "Contato não encontrado"
+            });           
+        } else {
             response.status(200).send({
                 mensagem: "GET com sucesso",
                 contato: contato
-            });
-        } else {
-            response.status(404).json({
-                mensagem: "Contato não encontrado"
-            });
+        });
         }
-    })
+    });
 
 }
 
@@ -56,7 +69,7 @@ const deleteContato = (request, response) => {
     const contatoId = request.params.id;
     contatoCollections.findByIdAndDelete(contatoId, (error, contato) => {
         if (error) {
-            response.status(500).send(error);
+            response.status(400).json({ mensagem: "Requisição falhou"});
         } else if (contato) {
             response.status(200).json({
                 mensagem: "DELETE com sucesso"

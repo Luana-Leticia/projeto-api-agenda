@@ -15,7 +15,7 @@ router.get('/', controller.getAll);
 //@desc Retornar apenas um único contato pelo nome
 //@access Public
 //@endpoint http://localhost:porta/contatos/nome/:nome
-//router.get('/nome/:nome', controller.getByName);
+router.get('/nome/:nome', controller.getByName);
 
 //@route GET contato
 //@params :id
@@ -29,5 +29,12 @@ router.get('/id/:id', controller.getById);
 //@acess Public
 //@endpoint http://localhost:porta/contatos/criar
 router.post('/criar', controller.addContato);
+
+//@route DELETE contato
+//@params :id
+//@desc Excluir um contato pelo id : identificador
+//@access Public
+//@endpoint http://localhost:porta/contatos/deletar/:id
+router.delete('/deletar/:id', controller.deleteContato);
 
 module.exports = router;
