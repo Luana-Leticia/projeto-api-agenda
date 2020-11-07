@@ -37,4 +37,18 @@ router.post('/criar', controller.addContato);
 //@endpoint http://localhost:porta/contatos/deletar/:id
 router.delete('/deletar/:id', controller.deleteContato);
 
+//@route PUT contato
+//@params :id
+//desc Atualizar completamente um contato pelo id : identificador
+//access Public
+//@endpoint http://localhost:porta/contatos/atualizar/:id
+router.put('/atualizar/:id', controller.updateContato);
+
+//@route PATCH contato
+//@params :id
+//@desc Atualizar parcialmente um contato pelo id : identificador
+//@access Public
+//@endpoint http://localhost:porta/contatos/atualizar/telefone/:id
+router.patch('/atualizar/telefone/:id', controller.updatePartialContato);
+
 module.exports = router;

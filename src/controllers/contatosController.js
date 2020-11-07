@@ -1,3 +1,4 @@
+const { response } = require('express');
 const contatoCollections = require('../models/contatosSchema');
 
 const getAll = (request, response) => {
@@ -5,10 +6,10 @@ const getAll = (request, response) => {
         if (error) {
             response.status(500).send(error);
         } else {
-            response.status(200).json({ 
+            response.status(200).json({
                 mensagem: "GET com sucesso",
                 contatos: contatos
-        });
+            });
         }
     });
 }
@@ -24,26 +25,22 @@ const getByName = (request, response) => {
                 contato: contato
             });
         } else {
-            response.status(404).json({
-                mensagem: "Contato não encontrado"
-            })
+            response.status(404).json({ mensagem: "Contato não encontrado" })
         }
     })
-    
+
 }
 
 const getById = (request, response) => {
     const contatoId = request.params.id;
     contatoCollections.findById(contatoId, (error, contato) => {
         if (error) {
-            response.status(404).json({
-                mensagem: "Contato não encontrado"
-            });           
+            response.status(404).json({ mensagem: "Contato não encontrado" });
         } else {
             response.status(200).send({
                 mensagem: "GET com sucesso",
                 contato: contato
-        });
+            });
         }
     });
 
@@ -69,22 +66,59 @@ const deleteContato = (request, response) => {
     const contatoId = request.params.id;
     contatoCollections.findByIdAndDelete(contatoId, (error, contato) => {
         if (error) {
-            response.status(400).json({ mensagem: "Requisição falhou"});
+            response.status(400).json({ mensagem: "Requisição falhou" });
         } else if (contato) {
-            response.status(200).json({
-                mensagem: "DELETE com sucesso"
-            });
+            response.status(200).json({ mensagem: "DELETE com sucesso" });
         } else {
-            response.status(404).json({ mensagem: "Contato não encontrado"});
+            response.status(404).json({ mensagem: "Contato não encontrado" });
         }
     });
 }
 
+const updateContato = (request, response) => {
+    const contatoId = request.params.id;
+    const novoContato = request.body;
+    const returnNew = { new: true };
+    contatoCollections.findByIdAndUpdate(contatoId, novoContato, returnNew,
+        (error, contato) => {
+            if (error) {
+                response.status(500).send(error);
+            } else if (contato) {
+                response.status(200).json({
+                    mensagem: "PUT com sucesso",
+                    contato: contato
+                });
+            } else {
+                response.status(404).json({ mensagem: "Contato não encontrado" });
+            }
+        })
+}
+
+const updatePartialContato = (request, response) => {
+    const contatoId = request.params.id;
+    const novoTelefone = request.body.celular;
+    const returnNew = { new: true };
+    contatoCollections.findByIdAndUpdate(contatoId, { $set: { celular: novoTelefone } }, returnNew,
+        (error, contato) => {
+            if (error) {
+                response.status(500).send(error);
+            } else if (contato) {
+                response.status(200).json({
+                    mensagem: "PATCH com sucesso",
+                    contato: contato
+                });
+            } else {
+                response.status(404).json({ mensagem: "Contato não encontrado" });
+            }
+        });
+}
 
 module.exports = {
     getAll,
     getByName,
     getById,
     addContato,
-    deleteContato
+    deleteContato,
+    updateContato,
+    updatePartialContato
 }
