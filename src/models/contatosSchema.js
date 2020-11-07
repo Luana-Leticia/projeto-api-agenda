@@ -22,8 +22,8 @@ const contatoSchema = new Schema({
     fotoPerfil: {
         type: String,
     }
-},
-{
-    collection: 'contatos',
-    versionKey: false
 })
+
+const contatoCollections = mongoose.model('contato', contatoSchema);
+
+module.exports = contatoCollections;

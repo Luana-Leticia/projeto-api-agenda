@@ -8,6 +8,6 @@ const controller = require('../controllers/contatosController')
 //@desc Retornar todos os contatos
 //@acess Public
 //@endpoint http://localhost:porta/contatos
-router.get('/contatos', controller.getAll)
+router.get('/', controller.getAll)
 
 module.exports = router;
