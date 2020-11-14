@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/contatosController');
 
-// rotas e documentações
 
 //@route GET contatos
 //@desc Retornar todos os contatos

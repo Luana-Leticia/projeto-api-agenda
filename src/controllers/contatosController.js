@@ -1,4 +1,3 @@
-const { response } = require('express');
 const contatoCollections = require('../models/contatosSchema');
 
 const getAll = (request, response) => {
@@ -97,20 +96,25 @@ const updateContato = (request, response) => {
 const updatePartialContato = (request, response) => {
     const contatoId = request.params.id;
     const novoTelefone = request.body.celular;
+    console.log(novoTelefone)
     const returnNew = { new: true };
-    contatoCollections.findByIdAndUpdate(contatoId, { $set: { celular: novoTelefone } }, returnNew,
-        (error, contato) => {
-            if (error) {
-                response.status(500).send(error);
-            } else if (contato) {
-                response.status(200).json({
-                    mensagem: "PATCH com sucesso",
-                    contato: contato
-                });
-            } else {
-                response.status(404).json({ mensagem: "Contato não encontrado" });
-            }
-        });
+    if (novoTelefone) {
+        contatoCollections.findByIdAndUpdate(contatoId, { $set: { celular: novoTelefone } }, returnNew,
+            (error, contato) => {
+                if (error) {
+                    response.status(500).send(error);
+                } else if (contato) {
+                    response.status(200).json({
+                        mensagem: "PATCH com sucesso",
+                        contato: contato
+                    });
+                } else {
+                    response.status(404).json({ mensagem: "Contato não encontrado" });
+                }
+            });
+    } else {
+        response.status(400).json({ mensagem: "Número de telefone não passado"});
+    }
 }
 
 module.exports = {
